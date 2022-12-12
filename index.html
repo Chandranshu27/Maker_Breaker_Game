@@ -20,9 +20,7 @@
 
   <div class="top-container">
     <h3 class="experiment-heading">Ready to Play?</h3> 
-        <p class="experiment">
-        2-Player Game
-    </p>
+    <marquee scrollamount="15" style="color: yellow; text-decoration: underline;"><i>2-Player Game</i></marquee>
     <p class="experiment">
         This triangle game is played by two
         players,  Maker and Breaker, on the complete graph Kn. Alternatively, Maker
@@ -37,7 +35,7 @@
       <form action="#">
         <div class="column" >
             <p >Enter nodes for the complete graph:</p>
-            <input type="number" id="nodes" value="3" min="3" max="6" style="width: 120px">
+            <input type="number" id="nodes" value="3" min="3" max="8" style="width: 120px">
             <input type="submit" id="nodeSubmit">
         </div>
 
@@ -58,31 +56,46 @@
         </div>
       </form>
     </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div style="display: inline-block; margin: 0px 100px;">
+        <h3>All Edges: </h3>
+        <p id="valueOfEdges"></p>
+    </div>
 
-    <div class="bottom-container">
+    <div>
+
         <svg width="960" height="500"></svg>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script>
         // GRAPH GENERATION
 
         var numOfNodes;
-        var numOfBreakerChances;
+        var numOfBreakerChances = 1;
         var numOfEdges;
+        var nameOfEdges = [];
+        var edgesArray = [];
+        var makerEdgeArray = [];
+        var breakerEdgeArray = [];
 
         document.getElementById("nodeSubmit").onclick=function()
         {
-            if(document.getElementById("nodes").value >6 || document.getElementById("nodes").value<3)
+            if(document.getElementById("nodes").value >8 || document.getElementById("nodes").value<3)
             {
                 alert("Ranges for nodes in 3 to 6");
                 document.getElementById("nodes").value = 3;
                 generateCompleteGraph(3);
                 restart();
+                displayEdges(3);
             }
             else
             {
                 numOfNodes = document.getElementById("nodes").value;
                 generateCompleteGraph(numOfNodes);
                 restart();
+                displayEdges(numOfNodes);
             }
         }
 
@@ -132,8 +145,29 @@
             }
         }
 
-        // Start with kn = 1
+        function displayEdges(n)
+        {
+            nameOfEdges=[];
+            for(var i=0; i<n; i++)
+            {
+                for(var j=0; j<n; j++)
+                {
+                    if(i<j)
+                    {
+                        var a=i+1;
+                        var b=j+1;
+                        var temp = " (" + a + "," + b + ")";
+                        nameOfEdges.push(temp);
+                        edgesArray.push(a+""+b);
+                    }
+                }
+            }
+            document.getElementById("valueOfEdges").innerHTML = nameOfEdges;
+        }
+
+        // Start with kn = 3
         generateCompleteGraph(3);
+        displayEdges(3);
 
 
         // VIEW
@@ -183,6 +217,8 @@
             .attr("fill", function(d) { return color(d.id); })
             .call(function(node) { node.transition().attr("r", 8); })
             .merge(node);
+
+        
 
         // Apply the general update pattern to the links.
         link = link.data(graph.links, function(d) { return d.source.id + "-" + d.target.id; });
@@ -241,10 +277,87 @@
         }
 
         </script>
-
-        <script src="edge.js"></script>
     </div>
+
+    <div class="bottom-container-divs" style="background-color: rgb(168, 228, 168)">
+        <h2 style="text-align: center">Maker</h2><br>
+        <label for="makerEdge">Enter Edge (like for 12, enter 1 and 2 separately):</label>
+        <input type="text" id="makerA" style="margin: 15px; width: 20px;">
+        <input type="text" id="makerB" style="width: 20px;">
+        <button id="makerSubmit">Submit</button>
+        <p>Selected edges: </p>
+        <p id="makerSelectedEdges"></p>
+    </div>
+    <div class="bottom-container-divs" style="background-color: rgb(248, 155, 155)">
+        <h2 style="text-align: center">Breaker</h2><br>
+        <label for="makerEdge">Enter Edge (like for 12, enter 1 and 2 separately):</label>
+        <input type="text" id="breakerA" style="margin: 15px; width: 20px;" disabled>
+        <input type="text" id="breakerB" style="width: 20px;" disabled>
+        <button id="breakerSubmit" disabled>Submit</button>
+        <p>Selected edges: </p>
+        <p id="breakerSelectedEdges"></p>
+    </div>
+
+
+    <script>
+        var breakerCount=0;
+
+        document.getElementById("makerSubmit").onclick=function()
+        {
+            var a=document.getElementById("makerA").value;
+            var b=document.getElementById("makerB").value;
+            var temp=a+""+b;
+            if(edgesArray.includes(temp) && !makerEdgeArray.includes(temp) && !breakerEdgeArray.includes(temp))
+            {
+                makerEdgeArray.push(temp);
+                //var temp=document.getElementById("breakerSelectedEdges").innerHTML;
+                document.getElementById("makerSelectedEdges").innerHTML +=  "("+ a +"," + b + ")" + " ";
+
+                document.getElementById("makerA").disabled = true;
+                document.getElementById("makerB").disabled = true;
+                document.getElementById("makerSubmit").disabled = true;
+
+                document.getElementById("breakerA").disabled = false;
+                document.getElementById("breakerB").disabled = false;
+                document.getElementById("breakerSubmit").disabled = false;
+
+                breakerCount=0;
+            }
+            else
+            {
+                alert("entered edge is invalid or already selected");
+            }
+        }
+
+        document.getElementById("breakerSubmit").onclick=function()
+        {
+            breakerCount++;
+            alert(breakerCount);
+            var a=document.getElementById("breakerA").value;
+            var b=document.getElementById("breakerB").value;
+            var temp=a+""+b;
+            if(edgesArray.includes(temp) && !breakerEdgeArray.includes(temp) && !makerEdgeArray.includes(temp))
+            {
+                breakerEdgeArray.push(temp);
+                //var temp=document.getElementById("breakerSelectedEdges").innerHTML;
+                document.getElementById("breakerSelectedEdges").innerHTML +=  "("+ a +"," + b + ")" + " ";
+
+                if(breakerCount==numOfBreakerChances)
+                {
+                    document.getElementById("makerA").disabled = false;
+                    document.getElementById("makerB").disabled = false;
+                    document.getElementById("makerSubmit").disabled = false;
+
+                    document.getElementById("breakerA").disabled = true;
+                    document.getElementById("breakerB").disabled = true;
+                    document.getElementById("breakerSubmit").disabled = true;
+                }
+            }
+            else
+            {
+                alert("entered edge is invalid or already selected");
+            }
+        }
+    </script>
   </body>
 </html>
-
-<!-- https://cdn.jsdelivr.net/npm/chart.js -->

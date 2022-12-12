@@ -117,3 +117,16 @@ h1 {
     float: left;
     width: 33.33%;
   }
+
+.play-section{
+    float: left;
+}
+
+.bottom-container{
+}
+
+.bottom-container-divs{
+    float: left;
+    width: 50%;
+    text-align: center
+}
