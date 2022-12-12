@@ -322,6 +322,10 @@
                 document.getElementById("breakerSubmit").disabled = false;
 
                 breakerCount=0;
+                if(makerEdgeArray.length + breakerEdgeArray.length == edgesArray.length)
+                {
+                    alert("All edges included");
+                }
             }
             else
             {
@@ -331,13 +335,12 @@
 
         document.getElementById("breakerSubmit").onclick=function()
         {
-            breakerCount++;
-            alert(breakerCount);
             var a=document.getElementById("breakerA").value;
             var b=document.getElementById("breakerB").value;
             var temp=a+""+b;
             if(edgesArray.includes(temp) && !breakerEdgeArray.includes(temp) && !makerEdgeArray.includes(temp))
             {
+                breakerCount++;
                 breakerEdgeArray.push(temp);
                 //var temp=document.getElementById("breakerSelectedEdges").innerHTML;
                 document.getElementById("breakerSelectedEdges").innerHTML +=  "("+ a +"," + b + ")" + " ";
@@ -351,6 +354,10 @@
                     document.getElementById("breakerA").disabled = true;
                     document.getElementById("breakerB").disabled = true;
                     document.getElementById("breakerSubmit").disabled = true;
+                }
+                if(makerEdgeArray.length + breakerEdgeArray.length == edgesArray.length)
+                {
+                    alert("All edges included");
                 }
             }
             else
