@@ -309,8 +309,41 @@
             var temp=a+""+b;
             if(edgesArray.includes(temp) && !makerEdgeArray.includes(temp) && !breakerEdgeArray.includes(temp))
             {
+                var winningCondition = false, temp2;
+
+                for(item = 0; item < makerEdgeArray.length; ++item)
+                {
+                    if(makerEdgeArray[item][0] == a)
+                    {
+                        if(makerEdgeArray[item][1] < b)
+                        {
+                            temp2 = makerEdgeArray[item][1] + "" + b;
+                        }
+                        else
+                        {
+                            temp2 = b + "" + makerEdgeArray[item][1];
+                        }
+                    }
+
+                    else if(makerEdgeArray[item][1] == a)
+                    {
+                        if(makerEdgeArray[item][0] < b)
+                        {
+                            temp2 = makerEdgeArray[item][0] + "" + b;
+                        }
+                        else
+                        {
+                            temp2 = b + "" + makerEdgeArray[item][0];
+                        }
+                    }
+
+                    if(makerEdgeArray.includes(temp2))
+                    {
+                        winningCondition = true;
+                    }
+                }
+
                 makerEdgeArray.push(temp);
-                //var temp=document.getElementById("breakerSelectedEdges").innerHTML;
                 document.getElementById("makerSelectedEdges").innerHTML +=  "("+ a +"," + b + ")" + " ";
 
                 document.getElementById("makerA").disabled = true;
@@ -322,9 +355,17 @@
                 document.getElementById("breakerSubmit").disabled = false;
 
                 breakerCount=0;
-                if(makerEdgeArray.length + breakerEdgeArray.length == edgesArray.length)
+
+                if(winningCondition == true)
                 {
-                    alert("All edges included");
+                    alert("Maker Won!");
+                    location.reload();
+                }
+
+                else if(makerEdgeArray.length + breakerEdgeArray.length == edgesArray.length)
+                {
+                    alert("All edges included! Breaker Won!");
+                    location.reload();
                 }
             }
             else
@@ -357,7 +398,8 @@
                 }
                 if(makerEdgeArray.length + breakerEdgeArray.length == edgesArray.length)
                 {
-                    alert("All edges included");
+                    alert("All edges included! Breaker Won!");
+                    location.reload();
                 }
             }
             else
