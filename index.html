@@ -42,10 +42,10 @@
         <div class="column">
             <p>Choose option to play with:</p>
             <form action="/action_page.php">
-                <input type="radio" id="edge" name="option" value="30" checked>
-                <label for="edge">edges</label><br>
-                <input type="radio" id="node" name="option" value="60">
-                <label for="node">nodes</label><br> 
+                <input type="radio" id="edgeRadioButton" name="option" value="30" checked>
+                <label for="edgeRadioButton">edges</label><br>
+                <input type="radio" id="nodeRadioButton" name="option" value="60">
+                <label for="nodeRadioButton">nodes</label><br> 
             </form>
         </div>
 
@@ -79,6 +79,7 @@
         var edgesArray = [];
         var makerEdgeArray = [];
         var breakerEdgeArray = [];
+        var nameOfNodes = [];
 
         document.getElementById("nodeSubmit").onclick=function()
         {
@@ -147,7 +148,6 @@
 
         function displayEdges(n)
         {
-            nameOfEdges=[];
             for(var i=0; i<n; i++)
             {
                 for(var j=0; j<n; j++)
@@ -165,10 +165,18 @@
             document.getElementById("valueOfEdges").innerHTML = nameOfEdges;
         }
 
+        function displayNodes(n)
+        {
+            for(var i=0; i<n; i++)
+            {
+                nameOfNodes.push(i+1);
+            }
+        }
+
         // Start with kn = 3
         generateCompleteGraph(3);
         displayEdges(3);
-
+        displayNodes(3);
 
         // VIEW
         // Based on Bostock's "Modifying a Force Layout II": https://bl.ocks.org/mbostock/0adcc447925ffae87975a3a81628a196
@@ -279,23 +287,44 @@
         </script>
     </div>
 
-    <div class="bottom-container-divs" style="background-color: rgb(168, 228, 168)">
-        <h2 style="text-align: center">Maker</h2><br>
-        <label for="makerEdge">Enter Edge (like for 12, enter 1 and 2 separately):</label>
-        <input type="text" id="makerA" style="margin: 15px; width: 20px;">
-        <input type="text" id="makerB" style="width: 20px;">
-        <button id="makerSubmit">Submit</button>
-        <p>Selected edges: </p>
-        <p id="makerSelectedEdges"></p>
+    <div id="edgeWiseGame">
+        <div class="bottom-container-divs" style="background-color: rgb(168, 228, 168)">
+            <h2 style="text-align: center">Maker</h2><br>
+            <label for="makerEdge">Enter Edge (like for 12, enter 1 and 2 separately):</label>
+            <input type="text" id="makerA" style="margin: 15px; width: 20px;">
+            <input type="text" id="makerB" style="width: 20px;">
+            <button id="makerSubmit">Submit</button>
+            <p>Selected edges: </p>
+            <p id="makerSelectedEdges"></p>
+        </div>
+        <div class="bottom-container-divs" style="background-color: rgb(248, 155, 155)">
+            <h2 style="text-align: center">Breaker</h2><br>
+            <label for="breakerEdge">Enter Edge (like for 12, enter 1 and 2 separately):</label>
+            <input type="text" id="breakerA" style="margin: 15px; width: 20px;" disabled>
+            <input type="text" id="breakerB" style="width: 20px;" disabled>
+            <button id="breakerSubmit" disabled>Submit</button>
+            <p>Selected edges: </p>
+            <p id="breakerSelectedEdges"></p>
+        </div>
     </div>
-    <div class="bottom-container-divs" style="background-color: rgb(248, 155, 155)">
-        <h2 style="text-align: center">Breaker</h2><br>
-        <label for="makerEdge">Enter Edge (like for 12, enter 1 and 2 separately):</label>
-        <input type="text" id="breakerA" style="margin: 15px; width: 20px;" disabled>
-        <input type="text" id="breakerB" style="width: 20px;" disabled>
-        <button id="breakerSubmit" disabled>Submit</button>
-        <p>Selected edges: </p>
-        <p id="breakerSelectedEdges"></p>
+
+    <div id="nodeWiseGame">
+        <div class="bottom-container-divs" style="background-color: rgb(168, 228, 168)">
+            <h2 style="text-align: center">Maker</h2><br>
+            <label for="makerNode">Enter Node (like for node 1, enter 1):</label>
+            <input type="text" id="makerNode" style="margin: 15px; width: 20px;">
+            <button id="makerNodeSubmit">Submit</button>
+            <p>Selected Nodes: </p>
+            <p id="makerSelectedNodes"></p>
+        </div>
+        <div class="bottom-container-divs" style="background-color: rgb(248, 155, 155)">
+            <h2 style="text-align: center">Breaker</h2><br>
+            <label for="breakerNode">Enter Node (like for node 1, enter 1):</label>
+            <input type="text" id="breakerNode" style="margin: 15px; width: 20px;" disabled>
+            <button id="breakerNodeSubmit" disabled>Submit</button>
+            <p>Selected Nodes: </p>
+            <p id="breakerSelectedNodes"></p>
+        </div>
     </div>
 
 
@@ -406,6 +435,18 @@
             {
                 alert("entered edge is invalid or already selected");
             }
+        }
+
+        document.getElementById("edgeRadioButton").onclick=function()
+        {
+            document.getElementById("edgeWiseGame").style.display = "block";
+            document.getElementById("nodeWiseGame").style.display = "none";
+        }
+
+        document.getElementById("nodeRadioButton").onclick=function()
+        {
+            document.getElementById("edgeWiseGame").style.display = "none";
+            document.getElementById("nodeWiseGame").style.display = "block";
         }
     </script>
   </body>

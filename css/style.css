@@ -127,3 +127,11 @@ h1 {
     width: 50%;
     text-align: center
 }
+
+#nodeWiseGame{
+    display: none;
+}
+
+#edgeWiseGame{
+    display: block;
+}
