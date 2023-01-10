@@ -79,7 +79,9 @@
         var edgesArray = [];
         var makerEdgeArray = [];
         var breakerEdgeArray = [];
-        var nameOfNodes = [];
+        var nodesArray = [];
+        var makerNodeArray = [];
+        var breakerNodeArray = [];
 
         document.getElementById("nodeSubmit").onclick=function()
         {
@@ -90,6 +92,7 @@
                 generateCompleteGraph(3);
                 restart();
                 displayEdges(3);
+                displayNodes(3);
             }
             else
             {
@@ -97,6 +100,7 @@
                 generateCompleteGraph(numOfNodes);
                 restart();
                 displayEdges(numOfNodes);
+                displayNodes(numOfNodes);
             }
         }
 
@@ -169,7 +173,7 @@
         {
             for(var i=0; i<n; i++)
             {
-                nameOfNodes.push(i+1);
+                nodesArray.push(i+1);
             }
         }
 
@@ -412,7 +416,6 @@
             {
                 breakerCount++;
                 breakerEdgeArray.push(temp);
-                //var temp=document.getElementById("breakerSelectedEdges").innerHTML;
                 document.getElementById("breakerSelectedEdges").innerHTML +=  "("+ a +"," + b + ")" + " ";
 
                 if(breakerCount==numOfBreakerChances)
@@ -437,16 +440,85 @@
             }
         }
 
+        document.getElementById("makerNodeSubmit").onclick=function()
+        {
+            var temp=document.getElementById("makerNode").value;
+            temp=Number(temp);
+            if(nodesArray.includes(temp) && !breakerNodeArray.includes(temp) && !makerNodeArray.includes(temp))
+            {
+                makerNodeArray.push(temp);
+                document.getElementById("makerSelectedNodes").innerHTML +=  temp +"," + " ";
+
+                document.getElementById("breakerNode").disabled = false;
+                document.getElementById("breakerNodeSubmit").disabled = false;
+
+                document.getElementById("makerNode").disabled = true;
+                document.getElementById("makerNodeSubmit").disabled = true;
+
+                breakerCount = 0;
+
+                if(makerNodeArray.length == 3)
+                {
+                    alert("Maker Won!");
+                    location.reload();
+                }
+
+                else if(makerNodeArray.length + breakerNodeArray.length == nodesArray.length)
+                {
+                    alert("All nodes included! Breaker Won!");
+                    location.reload();
+                }
+            }
+            else
+            {
+                alert("entered node is invalid or already selected");
+            }
+        }
+
+        document.getElementById("breakerNodeSubmit").onclick=function()
+        {
+            var temp=document.getElementById("breakerNode").value;
+            temp=Number(temp);
+            if(nodesArray.includes(temp) && !breakerNodeArray.includes(temp) && !makerNodeArray.includes(temp))
+            {
+                breakerCount++;
+                breakerNodeArray.push(temp);
+                document.getElementById("breakerSelectedNodes").innerHTML +=  temp +"," + " ";
+
+                if(breakerCount==numOfBreakerChances)
+                {
+                    document.getElementById("makerNode").disabled = false;
+                    document.getElementById("makerNodeSubmit").disabled = false;
+
+                    document.getElementById("breakerNode").disabled = true;
+                    document.getElementById("breakerNodeSubmit").disabled = true;
+                }
+                if(makerNodeArray.length + breakerNodeArray.length == nodesArray.length)
+                {
+                    alert("All nodes included! Breaker Won!");
+                    location.reload();
+                }
+            }
+            else
+            {
+                alert("entered node is invalid or already selected");
+            }
+        }
+
+        
+
         document.getElementById("edgeRadioButton").onclick=function()
         {
             document.getElementById("edgeWiseGame").style.display = "block";
             document.getElementById("nodeWiseGame").style.display = "none";
+            breakerCount = 0;
         }
 
         document.getElementById("nodeRadioButton").onclick=function()
         {
             document.getElementById("edgeWiseGame").style.display = "none";
             document.getElementById("nodeWiseGame").style.display = "block";
+            breakerCount = 0;
         }
     </script>
   </body>
