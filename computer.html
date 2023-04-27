@@ -325,9 +325,7 @@
         </div>
         <div class="bottom-container-divs" style="background-color: rgb(248, 155, 155)">
             <h2 style="text-align: center">Breaker</h2><br>
-            <label for="breakerNode">Enter Node (like for node 1, enter 1):</label>
-            <input type="text" id="breakerNode" style="margin: 15px; width: 20px;" disabled>
-            <button id="breakerNodeSubmit" disabled>Submit</button>
+            <label for="breakerNode">Computer selecting nodes...</label>
             <p>Selected Nodes: </p>
             <p id="breakerSelectedNodes"></p>
         </div>
@@ -451,9 +449,6 @@
                 makerNodeArray.push(temp);
                 document.getElementById("makerSelectedNodes").innerHTML +=  temp +"," + " ";
 
-                document.getElementById("breakerNode").disabled = false;
-                document.getElementById("breakerNodeSubmit").disabled = false;
-
                 document.getElementById("makerNode").disabled = true;
                 document.getElementById("makerNodeSubmit").disabled = true;
 
@@ -470,6 +465,14 @@
                     alert("All nodes included! Breaker Won!");
                     location.reload();
                 }
+
+                else
+                {
+                    for(let i=0; i<numOfBreakerChances; i++)
+                    {
+                        breakerNodeSubmit();
+                    }
+                }
             }
             else
             {
@@ -477,10 +480,14 @@
             }
         }
 
-        document.getElementById("breakerNodeSubmit").onclick=function()
+        function breakerNodeSubmit()
         {
-            var temp=document.getElementById("breakerNode").value;
-            temp=Number(temp);
+            remainingArray = nodesArray.filter( ( el ) => !makerNodeArray.includes( el ) );
+            remainingArray = remainingArray.filter( ( el ) => !breakerNodeArray.includes( el ) );
+            temp=remainingArray[0];
+
+            alert("Computer Selected: " + temp);
+            
             if(nodesArray.includes(temp) && !breakerNodeArray.includes(temp) && !makerNodeArray.includes(temp))
             {
                 breakerCount++;
@@ -491,9 +498,6 @@
                 {
                     document.getElementById("makerNode").disabled = false;
                     document.getElementById("makerNodeSubmit").disabled = false;
-
-                    document.getElementById("breakerNode").disabled = true;
-                    document.getElementById("breakerNodeSubmit").disabled = true;
                 }
                 if(makerNodeArray.length + breakerNodeArray.length == nodesArray.length)
                 {
