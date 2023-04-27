@@ -135,3 +135,14 @@ h1 {
 #edgeWiseGame{
     display: block;
 }
+
+#clickHere{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
+}
+
+a:hover{
+    color: palegreen;
+    background-color: transparent;
+    text-decoration: underline;
+}
