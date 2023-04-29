@@ -305,10 +305,7 @@
         </div>
         <div class="bottom-container-divs" style="background-color: rgb(248, 155, 155)">
             <h2 style="text-align: center">Breaker</h2><br>
-            <label for="breakerEdge">Enter Edge (like for 12, enter 1 and 2 separately):</label>
-            <input type="text" id="breakerA" style="margin: 15px; width: 20px;" disabled>
-            <input type="text" id="breakerB" style="width: 20px;" disabled>
-            <button id="breakerSubmit" disabled>Submit</button>
+            <label for="breakerEdge">Computer selecting edges...</label>
             <p>Selected edges: </p>
             <p id="breakerSelectedEdges"></p>
         </div>
@@ -383,10 +380,6 @@
                 document.getElementById("makerB").disabled = true;
                 document.getElementById("makerSubmit").disabled = true;
 
-                document.getElementById("breakerA").disabled = false;
-                document.getElementById("breakerB").disabled = false;
-                document.getElementById("breakerSubmit").disabled = false;
-
                 breakerCount=0;
 
                 if(winningCondition == true)
@@ -400,6 +393,14 @@
                     alert("All edges included! Breaker Won!");
                     location.reload();
                 }
+
+                else
+                {
+                    for(let i=0; i<numOfBreakerChances; i++)
+                    {
+                        breakerSubmit();
+                    }
+                }
             }
             else
             {
@@ -407,26 +408,109 @@
             }
         }
 
-        document.getElementById("breakerSubmit").onclick=function()
+        function breakerSubmit()
         {
-            var a=document.getElementById("breakerA").value;
-            var b=document.getElementById("breakerB").value;
-            var temp=a+""+b;
+            var a = 0 ,b = 0;
+            var temp = a+""+b;
+            var edge1, edge1node1, edge1node2, edge2, edge2node1, edge2node2;
+            //logic to be added here...
+
+            //Important condition when maker is just one step apart...
+
+            for(let i=0; i<makerEdgeArray.length; i++)
+            {
+                for(let j=i+1; j<makerEdgeArray.length; j++)
+                {
+                    edge1 = makerEdgeArray[i];
+                    edge2 = makerEdgeArray[j];
+
+                    edge1node1 = edge1[0];
+                    edge2node1 = edge2[0];
+                    edge1node2 = edge1[1];
+                    edge2node2 = edge2[1];
+
+                    if ((edge1node1 == edge2node1) && (temp=="00"))
+                    {
+                        if (edge1node2 < edge2node2)
+                        {
+                            a=edge1node2;
+                            b=edge2node2;
+                        }
+                        else
+                        {
+                            a=edge2node2;
+                            b=edge1node2;
+                        }
+
+                        if(!breakerEdgeArray.includes(a + "" + b))
+                        {
+                            temp = a + "" + b;
+                        }
+                    }
+
+                    if((edge1node2 == edge2node2) && (temp=="00"))
+                    {
+                        if(edge1node1 < edge2node1)
+                        {
+                            a = edge1node1;
+                            b = edge2node1;
+                        }
+                        else
+                        {
+                            a = edge2node1;
+                            b = edge1node1;
+                        }
+
+                        if(!breakerEdgeArray.includes(a + "" + b))
+                        {
+                            temp = a + "" + b;
+                        }
+                    }
+
+                    if((edge1node2 == edge2node1) && (temp=="00"))
+                    {
+                        if(edge1node1 < edge2node2)
+                        {
+                            a = edge1node1;
+                            b = edge2node2;
+                        }
+                        else
+                        {
+                            a=edge2node2;
+                            b=edge1node1;
+                        }
+
+                        if(!breakerEdgeArray.includes(a + "" + b))
+                        {
+                            temp = a + "" + b;
+                        }
+                    }
+                }
+            }
+
+            //Logic to be included here. For now computer is selecting first free edge if user is not just one step away
+
+            if(temp == "00")
+            {
+                remainingEdgeArray = edgesArray.filter( ( el ) => !makerEdgeArray.includes( el ) );
+                remainingEdgeArray = remainingEdgeArray.filter( ( el ) => !breakerEdgeArray.includes( el ) );
+
+                temp = remainingEdgeArray[0];
+            }
+
+            alert("Computer Selected: " + "(" + temp[0] + "," + temp[1] + ")");
+
             if(edgesArray.includes(temp) && !breakerEdgeArray.includes(temp) && !makerEdgeArray.includes(temp))
             {
                 breakerCount++;
                 breakerEdgeArray.push(temp);
-                document.getElementById("breakerSelectedEdges").innerHTML +=  "("+ a +"," + b + ")" + " ";
+                document.getElementById("breakerSelectedEdges").innerHTML +=  "("+ temp[0] +"," + temp[1] + ")" + " ";
 
                 if(breakerCount==numOfBreakerChances)
                 {
                     document.getElementById("makerA").disabled = false;
                     document.getElementById("makerB").disabled = false;
                     document.getElementById("makerSubmit").disabled = false;
-
-                    document.getElementById("breakerA").disabled = true;
-                    document.getElementById("breakerB").disabled = true;
-                    document.getElementById("breakerSubmit").disabled = true;
                 }
                 if(makerEdgeArray.length + breakerEdgeArray.length == edgesArray.length)
                 {
@@ -482,9 +566,9 @@
 
         function breakerNodeSubmit()
         {
-            remainingArray = nodesArray.filter( ( el ) => !makerNodeArray.includes( el ) );
-            remainingArray = remainingArray.filter( ( el ) => !breakerNodeArray.includes( el ) );
-            temp=remainingArray[0];
+            remainingNodeArray = nodesArray.filter( ( el ) => !makerNodeArray.includes( el ) );
+            remainingNodeArray = remainingNodeArray.filter( ( el ) => !breakerNodeArray.includes( el ) );
+            temp=remainingNodeArray[0];
 
             alert("Computer Selected: " + temp);
             
