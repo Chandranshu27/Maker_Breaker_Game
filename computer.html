@@ -493,6 +493,70 @@
 
             if(temp == "00")
             {
+                const makerLastEdge = makerEdgeArray[makerEdgeArray.length-1];
+
+                LastEdgeNode1 = makerLastEdge[0];
+                LastEdgeNode2 = makerLastEdge[1];
+
+                LastEdgeNode1_count=0;
+                LastEdgeNode2_count=0;
+                
+                DominantNode=0;
+
+                for(let i=1; i<=numOfNodes; i++)
+                {
+                    if(breakerEdgeArray.includes(i + "" + LastEdgeNode1) || breakerEdgeArray.includes(LastEdgeNode1 + "" + i))
+                    {
+                        LastEdgeNode1_count++;
+                    }
+
+                    if(breakerEdgeArray.includes(i + "" + LastEdgeNode2) || breakerEdgeArray.includes(LastEdgeNode2 + "" + i))
+                    {
+                        LastEdgeNode2_count++;
+                    }
+                }
+
+                if(LastEdgeNode1_count <= LastEdgeNode2_count)
+                {
+                    DominantNode = LastEdgeNode1;
+                }
+
+                else
+                {
+                    DominantNode = LastEdgeNode2;
+                }
+
+                for(let i=1; i<= numOfNodes; i++)
+                {
+                    if(i<DominantNode)
+                    {
+                        edgeToBeSelected = i + "" + DominantNode;
+                        if(!makerEdgeArray.includes(edgeToBeSelected) && !breakerEdgeArray.includes(edgeToBeSelected))
+                        {
+                            temp = edgeToBeSelected;
+                            break;
+                        }
+                    }
+
+                    else if(i == DominantNode)
+                    {
+                        continue;
+                    }
+
+                    else
+                    {
+                        edgeToBeSelected = DominantNode + "" + i;
+                        if(!makerEdgeArray.includes(edgeToBeSelected) && !breakerEdgeArray.includes(edgeToBeSelected))
+                        {
+                            temp = edgeToBeSelected;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(temp == "00")
+            {
                 remainingEdgeArray = edgesArray.filter( ( el ) => !makerEdgeArray.includes( el ) );
                 remainingEdgeArray = remainingEdgeArray.filter( ( el ) => !breakerEdgeArray.includes( el ) );
 
